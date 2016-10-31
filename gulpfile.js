@@ -1,3 +1,4 @@
+"use strict"
 var gulp = require('gulp')
 var inno = require('gulp-inno');
 var electron = require('gulp-electron');
@@ -53,9 +54,7 @@ gulp.task('electron', ['copy'], function() {
 
 gulp.task('prevent', ['electron'], function() {
   return gulp.src(R.map(function(platform) {
-    let s = path.resolve(process.cwd(), `release/${electronVersion}/${platform}/resources/app/`);
-    console.log(s);
-    return s;
+    return path.resolve(process.cwd(), `release/${electronVersion}/${platform}/resources/app/`);
   }, process.env.PLATFORMS.split(','))).pipe(clean({
     force: true
   }));
