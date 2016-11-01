@@ -26,7 +26,7 @@ gulp.task('copy', ['version', 'copy:modules'], function(){
 })
 
 gulp.task('copy:modules', function(){
-  return gulp.src(gnf(),{read: false}).pipe(gulp.dest(compileDir));
+  return gulp.src(gnf(),{base:'./'}).pipe(gulp.dest(compileDir));
 })
 
 gulp.task('electron', ['copy'], function() {
