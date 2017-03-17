@@ -7,9 +7,8 @@ const path = require('path');
 const https = require('follow-redirects').https;
 const http = require('follow-redirects').http;
 const fs = require('fs')
-const parseUrl = require('url').parse
+const parseUrl = require('url').parse;
 const semver = require('semver');
-const pkg = require('./package.json');
 const downloader = require('js-downloader');
 
 const updater = new EventEmitter();
@@ -64,12 +63,13 @@ updater.setFeedURL = function(url){
 
 updater.downloadAndInstall = function(releaseJSON){
   const directory = app.getPath('temp');
-  const filename = `${releaseJSON.name}-upgrade.exe`;
+  //const filename = `${releaseJSON.name}-upgrade.exe`;
+  const filename = parseUrl(releaseJSON.updateURL).pathname.split('/').pop();
   setupPath = path.resolve(directory,filename);
   downloader(releaseJSON.updateURL,{
     resume: false,
     output:{
-      path:directory,
+      path: directory,
       filename: filename
     }}).then((req)=>{
       req.request
@@ -79,12 +79,12 @@ updater.downloadAndInstall = function(releaseJSON){
            this.emit('done');
          }).pipe(req.stream).on('finish',()=>{
            this.emit('update-downloaded', releaseJSON,path.resolve(directory,filename));
-           this.emit('done');           
+           this.emit('done');
          });
     }).catch((e)=>{
       if(e.message === 'file is done') {
         this.emit('update-downloaded', releaseJSON,path.resolve(directory,filename));
-        this.emit('done');                   
+        this.emit('done');
       }
     });
 }
